@@ -1,0 +1,21 @@
+body,#wrapper,#shadowBox{background:#ddd}
+#loginBox{
+	width:320px;
+	height:auto;
+	margin:40px auto;
+	background:#fff;
+	padding:50px
+}
+
+#loginBox label,#registerBox label{color:#888;font-size:14px}
+#loginBox input[type=text],#loginBox input[type=password],#registerBox input[type=text],#registerBox input[type=password]{
+	width:93%;height:30px;background:#eee;margin:5px 0
+}
+
+#registerBox{
+	width:400px;
+	height:auto;
+	margin:40px auto;
+	background:#fff;
+	padding:50px
+}

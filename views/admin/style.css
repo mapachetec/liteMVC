@@ -1,0 +1,16 @@
+
+body,#wrapper,#shadowBox{background:#ddd}
+#formEditor{
+	width:600px;
+	margin:40px auto;
+	background:#fff;
+	padding:50px
+}
+
+
+#formEditor label,#registerBox label{color:#888;font-size:14px}
+#formEditor input[type=text],#formEditor input[type=password],#formEditor select{
+	width:93%;height:30px;background:#eee;margin:5px 0;
+}
+
+select option{padding:10px 0}
