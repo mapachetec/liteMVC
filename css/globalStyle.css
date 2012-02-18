@@ -1,0 +1,218 @@
+html{color:#000;margin:0;padding:0}
+div,dl,dt,dd,ul,ol,li,h1,h2,h4,h5,h6,pre,code,form,fieldset,legend,p,blockquote,th,td{
+	margin:0;padding:0;
+	}
+	table{border-collapse:collapse;border-spacing:0;}
+	fieldset,img{border:0;}
+	address,caption,cite,code,dfn,var{font-style:normal;font-weight:normal;}
+	caption,q:before,q:after{content:'';}
+	abbr,acronym {border:0;font-variant:normal;}
+	sup {vertical-align:text-top;}
+	sub {vertical-align:text-bottom;}
+	input,textarea,select{font-family:inherit;font-weight:inherit;}
+	input,textarea,select{*font-size:100%;}legend{color:#000;}small{font-size:11px}
+
+input, textarea, select {
+    color: #444444;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 3px 10px;
+    border:1px solid #ccc;
+    background:#fff
+}
+
+th{font-weight:bold}
+
+body{
+	font-family:verdana,arial,sans-serif;
+	
+/*
+	background:#f1f1f1;
+*/
+	
+/*
+	background-color:#eee;
+*/
+	text-align:center;
+	width:100%;
+	height:100%;
+	outline:0;
+	padding:0;
+	margin:0;
+	font-size:12px
+}
+
+
+/*###########################################################################
+				LINKS GENERALES
+#############################################################################*/
+a,a:link,a:active,a:visited{text-decoration:none;color:#21759B}
+a:hover{text-decoration:underline;color:#C96732}
+
+/*###########################################################################
+				BREAK WORDS EN DIVS Y <p>
+#############################################################################*/
+p,div{
+	word-wrap:break-word;
+}
+.img{background:url(img/spinner.gif) no-repeat scroll center center;}
+/*###########################################################################
+				SHORT CUTS
+#############################################################################*/
+.noShow{
+	display:none;
+	visibility:hidden
+}
+.textr{text-align:right}
+.textl{text-align:left}
+.textc{text-align:center}
+.textj{text-align:justify}
+.flr{float:right}
+.fll{float:left}
+.clearall,.clear{clear:both;margin:5px 0}
+.headlines {
+    background: url("img/bg-home-columns.gif") no-repeat scroll center top transparent;
+    margin: 0 0 8px;
+    padding: 15px 0 0;
+    position: relative;
+}
+.wave{color:#590302}
+.width100{width:100%}
+.subraya{text-decoration:underline}
+.separador_azul{
+	height:3px;
+	width:100%;
+	background:#0039A6;
+	margin-top:10px;
+}
+.separadorv_azul{
+	height:100%;
+	width:3px;
+	background:#0039A6;
+	margin-top:10px;
+}
+.separador_dotted{
+	height:1px;
+	width:100%;
+	border-bottom:dotted 1px #0039A6;
+	margin-top:2px;
+	margin-bottom:2px;
+}
+
+.margin0{margin:0 !important}
+.padding0{padding:0 !important}
+
+.link{cursor:pointer}
+.movible{cursor:move}
+.bold{font-weight:bold}
+.border0{border:none !important}
+.bgnone{background:none !important}
+.bshadow{
+	-moz-box-shadow:1px 2px 4px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 1px 2px 4p	x rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
+}
+.tshadow{text-shadow:0 1px 0 rgba(255, 255, 255, 0.6);}
+.bgblack{background:#000}
+
+/*######################################*/
+/*#              shadowBox	           #*/
+/*######################################*/
+#shadowBox{
+	width:990px;
+	height:auto;
+	margin:0 auto;
+	padding:0 0 10px;
+	position:relative;
+	text-align:left;
+	min-height:520px;
+	background:#fff;
+	padding:0 10px;
+/*
+	-moz-box-shadow:1px 2px 4px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 1px 2px 4p	x rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
+*/
+}
+/*######################################*/
+/*#             WRAPPER               #*/
+/*######################################*/
+#wrapper{
+	width:100%;
+	min-height:600px;
+/*
+	border:solid 1px #ccc;
+*/
+	height:auto;
+	position:relative;
+	background:#fff;
+	padding:10px;
+	
+}
+
+/*###########################################################################
+				MENSAJES (ERROR, CONFIRM Y NOTIFICACION)
+#############################################################################*/
+
+#msgConfirm {
+    background-color: #D4F28C;
+    background-image: url("img/icoconfirm.png");
+    border-color: #B2C722;
+    color:#4F8A10
+    
+}
+
+#msgWarning {
+    background-color: #FFF89D;
+    background-image: url("img/icowarning.png");
+    border-color: #9C894A;
+    color:#9F6000
+/*
+    margin:5px
+*/
+}
+
+#msgInfo {
+    background-color: #CDE5EC;
+    background-image: url("img/icoinfo.png");
+    border-color: #408ABD;
+    color:#00529B
+}
+#msgError {
+    background-color: #FFD3D4;
+    background-image: url("img/icoerror.png");
+    border-color: #E59D9E;
+    color:#D8000C;
+}
+.message {
+    background-position: 5px 10px;
+    background-repeat: no-repeat;
+    border-style: solid;
+    border-width: 1px;
+    font-size: 12px;
+    margin-bottom: 10px;
+    padding: 15px 15px 15px 48px;
+}
+/*###########################################################################
+				MenuNav
+#############################################################################*/
+#menunav{
+	padding:4px 0 5px 0;
+	background:#eaeaea;
+	color:#333
+}
+#menunav a{color:#fff}
+#menunav a:hover{color:#F7B615}
+
+.quote {
+    background: #F4F4F4;
+    border: 1px solid #DDDDDD;
+    border-radius: 2px 2px 2px 2px;
+    color: #333333;
+    font: normal 14px Georgia,Geneva,"Times New Roman",times;
+    margin: 8px 0;
+    padding: 10px 7px 10px 24px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+
