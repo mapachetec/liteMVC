@@ -12,7 +12,7 @@
 		define('BASE_URL',$domainBase);
 	
 	if(!defined('SECRET_KEY'))
-		define('SECRET_KEY','C0nUnPic0PepEP3ca5piCap4PAs');
+		define('SECRET_KEY','s0m3s3cr37pa55');
 		
 	define('CALL_ACTION', $callAction);
 	define('CALL_MOD', $callModule);
