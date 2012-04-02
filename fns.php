@@ -35,6 +35,18 @@ function do_query($query,$data=array(),$lastID=false)
 	}
 }
 
+function dateDiff($start, $end) {
+
+		$start_ts = strtotime($start);
+		
+		$end_ts = strtotime($end);
+		
+		$diff = $end_ts - $start_ts;
+		
+		return round($diff / 86400);
+
+}
+
 function setData($data=array(),$method='post'){
 	$error=0;
 	if(!is_array($data)||(is_array($data)&&isEmpty($data))||($method!='post'&&$method!='get')) return false;
@@ -314,6 +326,27 @@ function remove_accents($string) {
 
 }
 
+function sanitize_string($username,$strip_too=false){
+	$raw_username = $username;
+	$username = strip_all_tags( $username );
+	//$username = remove_accents( $username );
+	// Kill octets
+	$username = preg_replace( '|%([a-fA-F0-9][a-fA-F0-9])|', '', $username );
+	$username = preg_replace( '/&.+?;/', '', $username ); // Kill entities
+
+	// If strict, reduce to ASCII for max portability.
+	if ( $strict )
+		$username = preg_replace( '|[^a-z0-9 _.\-@]|i', '', $username );
+
+	// Consolidate contiguous whitespace
+	$username = preg_replace( '|\s+|', ' ', $username );
+	$username = str_replace("'", '', $username);
+	$username = str_replace("\\", '', $username);
+	$username = str_replace("\"", '', $username);
+
+	return ($strip_too)?strip_all_tags($username):$username;
+}
+
 function sanitize_title_with_dashes($title) {
 	$title = strip_tags($title);
 	// Preserve escaped octets.
@@ -438,9 +471,11 @@ function utf8_uri_encode( $utf8_string, $length = 0 ) {
  * @param string
  * @return boolean
  */
-function is_a_mail($mail)
-{
-	return preg_match('/^([a-zA-Z0-9]+[\._|[:alnum:]])+[[:alnum:]]@[a-zA-Z\d-]+([\.][\w]+)?[\.][a-zA-Z\d]{2,4}([\.][a-zA-Z]{2})?$/',$mail);
+function is_a_mail($mail){
+	if(!filter_var($mail, FILTER_VALIDATE_EMAIL))
+		return false;
+	
+	return true;
 }
 
 function redirect($u){
@@ -530,8 +565,38 @@ function enviar_mail($autor,$mailde,$mailpara,$asunto,$mensaje)
 		
 	}
 	
-	function pagi_footer($pages){
-		echo '<div class="pagination" style="width:90%;float:left">'.$pages.'</div>';
+	function mailto_friend($autor,$mailde,$mailpara,$asunto,$mensaje,$senderSys){
+		if(!is_a_mail($mailde) || !is_a_mail($mailpara) || !is_a_mail($senderSys))
+			return false;
+
+			
+		$header = 'From: ' . $senderSys . " \r\n";
+		$header .= "X-Mailer: PHP/" . phpversion() . " \r\n";
+		$header .= "Mime-Version: 1.0 \r\n";
+		$header .= "Content-Type: text/html;charset=utf-8\r\n";
+
+		$mensaje='
+				<div style="font-size:11px" >
+					<b style="color:darkred;font-size:15px">Datos del remitente:</b><br/>
+					<b>Nombre</b>: '.$autor.'<br/>
+					<b>Correo</b>: '.$mailde.'<br/>
+					<b>Fecha</b>: '.get_date().'<br/>
+					<br/>
+				</div>
+				<div style="clear:both;margin:5px 0"></div>
+				<b style="color:darkred">mensaje:</b>
+				<div style="padding:20px 30px;color:#333;border:1px solid #C99B04;background:#FFF69E;font:14px sans-serif,Geneva">
+					
+						'.$mensaje.'
+					
+				</div>
+		';
+		
+		if(!@mail($mailpara, $asunto, $mensaje, $header))
+			return false;
+			
+		
+		return true;
 	}
 	
 /**
