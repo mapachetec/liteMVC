@@ -4,8 +4,7 @@ function isEmpty($array){
 	return (count(array_filter($array)) == 0) ? true : false;
 }
 
-function get_results($query,$data=array())
-{
+function get_results($query,$data=array()){
 	global $DBH;
 	if(!is_array($data)||(is_array($data)&&isEmpty($data))) return false;
 	try{
@@ -20,15 +19,16 @@ function get_results($query,$data=array())
 			
 }
 
-function do_query($query,$data=array(),$lastID=false)
-{
+function do_query($query,$data=array(),$lastID=false){
 	global $DBH;
 	if(!is_array($data)||(is_array($data)&&isEmpty($data))) return false;
 	
 	try{
 		$st=$DBH->prepare($query);
-		$st->execute($data);
-		return (!$lastID)?$st->rowCount():array('done'=>$st->rowCount(),'lastID'=>$DBH->lastInsertId());
+		$doit=$st->execute($data);
+		if (!$doit) return false;
+		
+		return (!$lastID)?$doit:array('done'=>$st->rowCount(),'lastID'=>$DBH->lastInsertId());
 	}
 	catch(PDOException $e) {
 	    return false;
@@ -326,27 +326,6 @@ function remove_accents($string) {
 
 }
 
-function sanitize_string($username,$strip_too=false){
-	$raw_username = $username;
-	$username = strip_all_tags( $username );
-	//$username = remove_accents( $username );
-	// Kill octets
-	$username = preg_replace( '|%([a-fA-F0-9][a-fA-F0-9])|', '', $username );
-	$username = preg_replace( '/&.+?;/', '', $username ); // Kill entities
-
-	// If strict, reduce to ASCII for max portability.
-	if ( $strict )
-		$username = preg_replace( '|[^a-z0-9 _.\-@]|i', '', $username );
-
-	// Consolidate contiguous whitespace
-	$username = preg_replace( '|\s+|', ' ', $username );
-	$username = str_replace("'", '', $username);
-	$username = str_replace("\\", '', $username);
-	$username = str_replace("\"", '', $username);
-
-	return ($strip_too)?strip_all_tags($username):$username;
-}
-
 function sanitize_title_with_dashes($title) {
 	$title = strip_tags($title);
 	// Preserve escaped octets.
@@ -374,6 +353,26 @@ function sanitize_title_with_dashes($title) {
 	return $title;
 }
 
+function sanitize_string($username,$strip_too=false){
+	$raw_username = $username;
+	$username = strip_all_tags( $username );
+	//$username = remove_accents( $username );
+	// Kill octets
+	$username = preg_replace( '|%([a-fA-F0-9][a-fA-F0-9])|', '', $username );
+	$username = preg_replace( '/&.+?;/', '', $username ); // Kill entities
+
+	// If strict, reduce to ASCII for max portability.
+	if ( $strict )
+		$username = preg_replace( '|[^a-z0-9 _.\-@]|i', '', $username );
+
+	// Consolidate contiguous whitespace
+	$username = preg_replace( '|\s+|', ' ', $username );
+	$username = str_replace("'", '', $username);
+	$username = str_replace("\\", '', $username);
+	$username = str_replace("\"", '', $username);
+
+	return ($strip_too)?strip_all_tags($username):$username;
+}
 
 function sanitize_user( $username, $strict = false ) {
 	$raw_username = $username;
@@ -527,10 +526,7 @@ function get_ip(){
 	return (!empty($HTTP_SERVER_VARS['REMOTE_ADDR']))?$HTTP_SERVER_VARS['REMOTE_ADDR']:((!empty($HTTP_ENV_VARS['REMOTE_ADDR']))?$HTTP_ENV_VARS['REMOTE_ADDR']:getenv('REMOTE_ADDR'));
 }
 
-function enviar_mail($autor,$mailde,$mailpara,$asunto,$mensaje)
-	{
-		
-
+function enviar_mail($autor,$mailde,$mailpara,$asunto,$mensaje){
 		if(!is_a_mail($mailde) || !is_a_mail($mailpara))
 			return false;
 
@@ -541,8 +537,11 @@ function enviar_mail($autor,$mailde,$mailpara,$asunto,$mensaje)
 		$header .= "Content-Type: text/html;charset=utf-8\r\n";
 
 		$mensaje='
-				<b style="color:#2F53FF">Datos del remitente:</b>
 				<div style="font-size:11px" >
+					<a href="http://chetucar.com">
+						<img src="http://chetucar.com/views/home/imgs/logo.png" style="float:right;margin:0 15px;"/>
+					</a><br/>
+					<b style="color:darkred;font-size:15px">Datos del remitente:</b><br/>
 					<b>Nombre</b>: '.$autor.'<br/>
 					<b>Correo</b>: '.$mailde.'<br/>
 					<b>Fecha</b>: '.get_date().'<br/>
@@ -550,14 +549,14 @@ function enviar_mail($autor,$mailde,$mailpara,$asunto,$mensaje)
 					<br/>
 				</div>
 				<b style="color:#2F53FF">mensaje:</b>
-				<div style="padding:30px;color:#000;border:solid 1px #408ABD;background:#CDE5EC">
+				<div style="padding:20px 30px;color:#333;border:1px solid #C99B04;background:#FFF69E;font:14px sans-serif,Geneva">
 					
 						'.$mensaje.'
 					
 				</div>
 		';
 		
-		if(!@mail($mailpara, utf8_encode($asunto), utf8_encode($mensaje), $header))
+		if(!@mail($mailpara, $asunto, $mensaje, $header))
 			return false;
 			
 		
@@ -577,6 +576,9 @@ function enviar_mail($autor,$mailde,$mailpara,$asunto,$mensaje)
 
 		$mensaje='
 				<div style="font-size:11px" >
+					<a href="http://chetucar.com">
+						<img src="http://chetucar.com/views/home/imgs/logo.png" style="float:right;margin:0 15px;"/>
+					</a><br/>
 					<b style="color:darkred;font-size:15px">Datos del remitente:</b><br/>
 					<b>Nombre</b>: '.$autor.'<br/>
 					<b>Correo</b>: '.$mailde.'<br/>
@@ -598,6 +600,8 @@ function enviar_mail($autor,$mailde,$mailpara,$asunto,$mensaje)
 		
 		return true;
 	}
+	
+	
 	
 /**
  *
@@ -1010,7 +1014,7 @@ function show_twitter_widget($t,$w=230,$h=300){
 <?php 
 	
 
-function set_message($type,$msg){
+function set_message($type='info',$msg=''){
 	global $message;
 	switch($type){
 		case 'error':
@@ -1041,27 +1045,40 @@ function sanitize_sql_orderby( $orderby ){
 	return $orderby;
 }
 
-function protect_session($rol=false){
+function protect_session($rol=false,$ajax=false){
 	$rolls=array('admin','user');
-	
-	if (isset($_SESSION['HTTP_USER_AGENT'])){
-	    if ($_SESSION['HTTP_USER_AGENT'] != md5($_SERVER['HTTP_USER_AGENT'])||$_SESSION['ip']!=get_ip()){
-			redirect(ADD_MOD.'logout');
+	global $moduloDefault;
+	if(FALSE!==$rol){
+		if(!isset($_SESSION['nivel'])||strcmp($_SESSION['nivel'],$rol)!=0){
+			if(FALSE!==$ajax)
+				return false;
+			else	
+				redirect(ADD_MOD.'logout');
+		}else{
+			if(FALSE!==$ajax)
+				return true;
+		}
+	}
+	else{ 
+		if (isset($_SESSION['HTTP_USER_AGENT'])){
+		    if (strcmp($_SESSION['HTTP_USER_AGENT'],md5($_SERVER['HTTP_USER_AGENT']))!=0||$_SESSION['ip']!=get_ip()){
+				if($ajax)
+					return false;
+					
+				redirect(ADD_MOD.'logout');
+		    }else{
+				if(FALSE!==$ajax)
+					return true;
+			}
 	    }
+	    else{
+			if($ajax)
+				return false;
+				
+			redirect("?".CALL_MOD."=user&".CALL_ACTION."=login");
+		}
 	}
-	
-	else{
-		redirect("?".CALL_MOD."=user&".CALL_ACTION."=login");
-	}
-	
-	if($rol){
-		
-		if($_SESSION['nivel']!=$rol)
-			redirect(ADD_MOD.'logout');
-	}
-
 }
-
 function load_view($file,$data=null,$ext=null){
 	global $message,$action,$module;
 
@@ -1076,6 +1093,34 @@ function load_view($file,$data=null,$ext=null){
 	else
 		die("<h4>Error 404</h4>");
 }
+
+function clean_tags($string)
+{
+	$c=1;
+	$tmptags=(is_string($string))?explode(',',$string):$string;
+	foreach ($tmptags as $clave => $valor)
+	{
+		if(trim($valor)=="")
+		{
+			unset($tmptags[$clave]);
+			array_values($tmptags);
+		}
+	}
+	foreach ($tmptags as $tmpis){
+		$tags.=($c<count($tmptags))?strtolower(trim(do_compatible($tmpis))).', ':strtolower(trim(do_compatible($tmpis)));
+		$c++;
+	}
+
+	return $tags;
+}
+
+function get_meta_data(){ ?>
+	<META NAME="Author" CONTENT="Webmaster, thinkinbinary@gmail.com">
+		<META NAME="Language" CONTENT="es, en" />
+		<meta name="keywords" content="blog, chetucar, autos, comprar, vender, carros" />
+		<meta name="description" content="Chetucar.com | Donde Vendes y compras tu auto" />
+	
+<?php }
 
 function getStyle($global=true,$buttons=true){ global $folderModules,$pathModules,$module ?>
 	<?php if($global): ?>
